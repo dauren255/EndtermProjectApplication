@@ -32,7 +32,14 @@ class ArtistTableViewCell: UITableViewCell {
             artistImage.layer.cornerRadius = 10
         }
         artistName.text = artist.strArtist
-        
     }
 
+    func configureCell(artist: Artists){
+        viewCell.layer.cornerRadius = 10
+        if artist.photo != "", artist.photo != nil {
+            artistImage.af_setImage(withURL: URL(string: artist.photo!)!)
+            artistImage.layer.cornerRadius = 10
+        }
+        artistName.text = artist.name
+    }
 }

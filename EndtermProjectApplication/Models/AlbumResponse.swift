@@ -22,7 +22,6 @@ extension Album: Codable {
     }
 }
 
-// Array of albums
 struct AlbumResponse: Codable {
     let album: [Album]
 }

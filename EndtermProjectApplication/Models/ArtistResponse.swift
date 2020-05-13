@@ -1,6 +1,7 @@
 import UIKit
 
 struct Artist : Codable{
+    let idArtist: String
     let strArtist: String
     let intBornYear: String!
     let strGenre: String!
@@ -9,6 +10,7 @@ struct Artist : Codable{
     let strArtistThumb: String!
     let strArtistLogo: String!
 }
+
 
 struct ArtistResponse : Codable {
     let artists: [Artist]

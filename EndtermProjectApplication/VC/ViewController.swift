@@ -11,44 +11,30 @@ import FirebaseAuth
 import AlamofireImage
 import Alamofire
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
-
-    @IBOutlet weak var searchField: UITextField!
+class ViewController: UIViewController{
+    @IBOutlet weak var searchField: UISearchBar!
     @IBOutlet weak var artistTableView: UITableView!
-    @IBOutlet weak var favourites: UIBarButtonItem!
-     
+    private let manager = ArtistManager()
+
     var artists = [Artist]()
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if Auth.auth().currentUser == nil{
-//            navigationItem.rightBarButtonItem = nil
-//        }
-
-//        Auth.auth().signIn(withEmail: "dauren@gmail.com", password: "dauren"){
-//            (result, error) in
-//            if let error = error {
-//                print(error.localizedDescription)
-//                return
-//            }
-//            print("SIGN IN")
-//
-//        }
-        searchField.addTarget(self, action: #selector(ViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
     }
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        NetworkManager.loadArtists(
-            s: searchField.text!,
-        onComplete: { (response) in
-            self.artists = response.artists
-            self.artistTableView.reloadData()
-        }, onError: {
-            print("Error")
-        })
+    
+    func signOut() -> Bool{
+        do{
+            try Auth.auth().signOut()
+            return true
+        }catch{
+            return false
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         artistTableView.dataSource = self
         artistTableView.delegate = self
         artistTableView.reloadData()
+        searchField.delegate = self
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,8 +44,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
     }
-    
-    
+}
+extension ViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return artists.count
     }
@@ -69,7 +55,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! ArtistTableViewCell
         cell.configureCell(artist: artists[indexPath.row])
         
-        cell.layer.cornerRadius = 10
+        cell.layer.cornerRadius = 5
         let shadowPath2 = UIBezierPath(rect: cell.bounds)
         cell.layer.masksToBounds = false
         cell.layer.shadowColor = UIColor.black.cgColor
@@ -78,10 +64,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.layer.shadowPath = shadowPath2.cgPath
         return cell
     }
-    
-    private func textFieldDidBeginEditing(textField: UITextField) {
-        artistTableView.reloadData()
+}
+extension ViewController : UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        NetworkManager.loadArtists(
+            s: searchField.text!,
+            onComplete: { (response) in
+                self.artists = response.artists
+                self.artistTableView.reloadData()
+        }, onError: {
+            print("Error Artists")
+        })
     }
-
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        NetworkManager.loadArtists(
+            s: searchField.text!,
+            onComplete: { (response) in
+                self.artists = response.artists
+                self.artistTableView.reloadData()
+        }, onError: {
+            print("Error Artists")
+        })
+        view.endEditing(true)
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchField.text = ""
+        view.endEditing(true)
+    }
 }
 

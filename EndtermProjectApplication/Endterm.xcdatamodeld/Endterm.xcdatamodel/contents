@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Artists" representedClassName="Artists" syncable="YES" codeGenerationType="class">
+        <attribute name="biography" optional="YES" attributeType="String"/>
+        <attribute name="bornYear" optional="YES" attributeType="String"/>
+        <attribute name="genre" optional="YES" attributeType="String"/>
+        <attribute name="logo" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="photo" optional="YES" attributeType="String"/>
+        <attribute name="user" optional="YES" attributeType="String"/>
+        <attribute name="website" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="Artists" positionX="-63" positionY="-18" width="128" height="163"/>
+    </elements>
+</model>
